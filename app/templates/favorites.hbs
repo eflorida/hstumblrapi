@@ -1,0 +1,76 @@
+{{outlet}}
+
+<header>
+    <h1>Exploring Tumlbr API</h1>
+    <h2>A simple app, powered by EmberJS</h2>
+</header>
+
+<main role="main">
+    <section class="input-panel">
+
+        {{#if noResults}}
+            <p class="alert">Sorry, no results where found for your search.</p>
+        {{/if}}
+
+        <form {{action "search" on="submit"}}>
+            <h3>Search Tumblr posts by name or tag!</h3>
+
+            <fieldset>
+                <label for="blogSearch">Blog Name</label>
+                {{input value=blogSearch name="blogSearch" type="text" placeholder="blog name"}}
+
+                <label for="tagSearch">Tag</label>
+                 {{input value=tagSearch name="tagSearch" type="text" placeholder="tag"}}
+
+                <button class="search-submit" type="submit">Search</button>
+            </fieldset>
+        </form>
+
+        <section class="results-panel">
+            <h3>Results:</h3>
+
+            {{#if noResults}}
+                <p class="alert">:-( No matches found...</p>
+            {{/if}}
+
+            {{#each tumblrFeed.posts as |post|}}
+                <article>
+                    <p class="highlight-number">{{tumblrFeed.blog.likes}}</p>
+                    <h4><a href="{{post.post_url}}">{{post.blog_name}}</a><span> - {{tumblrFeed.blog.title}}</span></h4>
+                    <small>{{post.date}}</small>
+                    {{! Exmaple of custom templating based on post type --}}
+                    {{#if post.typeLink}}
+                        <a href="{{post.displaySummary}}">{{post.displaySummary}}</a>
+                    {{else}}
+                        <p>{{{post.displaySummary}}}</p>
+                    {{/if}}
+                    <ul>
+                        {{#each post.tags as |tag|}}
+                            <li>{{tag}}</li>
+                        {{/each}}
+                    </ul>
+                    <button {{action "addToFavorites" post.id}}>Add</button>
+                </article>
+            {{/each}}
+
+        </section>
+    </section>
+
+    <section class="favorites-panel">
+        <h3>Favorites:</h3>
+        {{#each favorites as |favorite|}}
+            <article>
+                    <p class="highlight-number">{{favorite.blog.likes}}</p>
+                    <h4><a href="{{favorite.post.post_url}}">{{favorite.post.blog_name}}</a><span> - {{favorite.blog.title}}</span></h4>
+                    <small>{{favorite.post.date}}</small>
+                    <p>{{{favorite.post.displaySummary}}}</p>
+                    <ul>
+                        {{#each favorite.post.tags as |tag|}}
+                            <li>{{tag}}</li>
+                        {{/each}}
+                    </ul>
+                    <button {{action "removeFromFavorites" favorite.post.id}}>Remove</button>
+                </article>
+        {{/each}}
+    </section>
+</main>
