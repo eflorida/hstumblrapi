@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
     actions: {
         search: function() {
-            var tumblrUrlBase = 'http://api.tumblr.com/v2/blog/';
+            var tumblrUrlBase = 'https://api.tumblr.com/v2/blog/';
             var tabParams = this.get('tagSearch') ? '?tag=' + this.get('tagSearch') : '';
             var self = this;
 
